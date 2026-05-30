@@ -1,4 +1,4 @@
-.PHONY: install-deps prepare
+.PHONY: install-deps prepare deploy
 
 # Add user's local bin to PATH for ansible-galaxy and ansible-playbook
 export PATH := /Users/v.nam/Library/Python/3.13/bin:$(PATH)
@@ -8,3 +8,6 @@ install-deps:
 
 prepare: install-deps
 	ANSIBLE_PLAYBOOK=$$(command -v ansible-playbook) && $$ANSIBLE_PLAYBOOK -i inventory.ini playbook.yml
+
+deploy: install-deps
+	ANSIBLE_PLAYBOOK=$$(command -v ansible-playbook) && $$ANSIBLE_PLAYBOOK -i inventory.ini deploy.yml
