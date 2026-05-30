@@ -1,0 +1,2 @@
+vault_datadog_api_key: "CHANGE_ME_TO_YOUR_DATADOG_API_KEY"
+vault_datadog_app_key: "CHANGE_ME_TO_YOUR_DATADOG_APP_KEY"
