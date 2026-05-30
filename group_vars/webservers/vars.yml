@@ -2,6 +2,7 @@
 db_host: "CHANGE_ME_TO_YOUR_DB_HOST"
 db_name: "redmine"
 db_user: "redmine"
+redmine_port: 8080
 
 # Reference to vault secrets
 db_password: "{{ vault_db_password }}"
@@ -22,3 +23,6 @@ datadog_checks:
         timeout: 5
         method: GET
         status_code_expected: 200
+
+# Override Docker dependencies to avoid installing python3-debian on Ubuntu
+docker_dependencies: ["apt-transport-https", "ca-certificates", "curl", "gnupg", "lsb-release", "software-properties-common", "python3", "python3-pip", "python3-venv", "sudo", "git"]
