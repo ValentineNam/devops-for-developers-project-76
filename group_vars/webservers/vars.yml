@@ -1,0 +1,3 @@
+db_host: "CHANGE_ME_TO_YOUR_DB_HOST"
+db_name: "redmine"
+db_user: "redmine"

@@ -29,13 +29,17 @@
         name: "{{ redmine_container_name }}"
         state: absent
 
-    - name: Run Redmine container
+    - name: Run Redmine container with MySQL connection
       community.docker.docker_container:
         name: "{{ redmine_container_name }}"
         image: "{{ redmine_image }}"
         restart: yes
         ports:
           - "{{ redmine_port }}:3000"
-        env_file: "{{ redmine_env_file }}"
+        env:
+          REDMINE_DB_MYSQL: "{{ db_name }}"
+          REDMINE_DB_USERNAME: "{{ db_user }}"
+          REDMINE_DB_PASSWORD: "{{ db_password }}"
+          REDMINE_DB_HOST: "{{ db_host }}"
         volumes:
           - "{{ redmine_data_dir }}/data:/usr/src/redmine/files"
