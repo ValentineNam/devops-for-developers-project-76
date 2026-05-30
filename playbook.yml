@@ -1,9 +1,37 @@
----
-- hosts: all
+- name: Deploy
+  hosts: all
+  become: true
+
   vars:
     pip_install_packages:
       - name: docker
+
   roles:
-    - geerlingguy.pip
-    - geerlingguy.docker
-    - datadog.datadog
+    - role: geerlingguy.pip
+      tags: setup
+
+  tasks:
+    - name: Deploy Redmine application
+      tags: app
+      block:
+        - name: Create directory for app
+          ansible.builtin.file:
+            path: '{{ app_dir }}'
+            state: directory
+            mode: '0755'
+
+        - name: Create environment variables
+          ansible.builtin.template:
+            src: .env.example.j2
+            dest: '{{ app_env }}'
+            mode: '0600'
+
+        - name: Run container
+          community.docker.docker_container:
+            name: redmine
+            image: redmine
+            state: started
+            restart: true
+            env_file: '{{ app_env }}'
+            ports:
+              - '{{ redmine_port }}:{{ redmine_port_int }}'

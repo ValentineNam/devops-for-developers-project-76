@@ -1,0 +1,10 @@
+app_dir: redmine
+app_env: '{{ app_dir }}/.env'
+redmine_port: 80
+redmine_port_int: 3000
+
+REDMINE_DB_POSTGRES: rc1b-2adafq6grked403g.mdb.yandexcloud.net,rc1b-5jslfks55drn6huc.mdb.yandexcloud.net
+REDMINE_DB_PORT: 6432
+REDMINE_DB_DATABASE: db-devops
+REDMINE_DB_USERNAME: ilrosch
+db_password: '{{ vault_db_password }}'

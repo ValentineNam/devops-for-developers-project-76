@@ -1,25 +1,29 @@
-.PHONY: install-deps prepare deploy encrypt-vault decrypt-vault view-vault
+install-app:
+	ansible-playbook -i inventory.ini playbook.yml  --vault-password-file .pass
 
-# Add user's local bin to PATH for ansible-galaxy and ansible-playbook
-export PATH := /Users/v.nam/Library/Python/3.13/bin:$(PATH)
+install-roles:
+	ansible-galaxy role install -r requirements.yml
 
-install-deps:
-	ANSIBLE_GALAXY=$$(command -v ansible-galaxy) && $$ANSIBLE_GALAXY install -r requirements.yml
+install-colls:
+	ansible-galaxy collection install -r requirements.yml
 
-prepare: install-deps
-	ANSIBLE_PLAYBOOK=$$(command -v ansible-playbook) && $$ANSIBLE_PLAYBOOK -i inventory.ini --ask-vault-pass playbook.yml
+dd-monitoring:
+	ansible-playbook -i inventory.ini dd_playbook.yml --vault-password-file .pass
 
-deploy: install-deps
-	ANSIBLE_PLAYBOOK=$$(command -v ansible-playbook) && $$ANSIBLE_PLAYBOOK -i inventory.ini --ask-vault-pass deploy.yml
+deploy:
+	ansible-playbook -i inventory.ini playbook.yml --tags="app" --vault-password-file .pass
 
-encrypt-vault:
-	@echo "Encrypting group_vars/webservers/vault.yml"
-	ANSIBLE_VAULT=$$(command -v ansible-vault) && $$ANSIBLE_VAULT encrypt group_vars/webservers/vault.yml
+vault-edit:
+	ansible-vault edit group_vars/webservers/vault.yml --vault-password-file .pass
 
-decrypt-vault:
-	@echo "Decrypting group_vars/webservers/vault.yml"
-	ANSIBLE_VAULT=$$(command -v ansible-vault) && $$ANSIBLE_VAULT decrypt group_vars/webservers/vault.yml
+setup: install-roles install-colls install-app dd-monitoring
 
-view-vault:
-	@echo "Viewing encrypted group_vars/webservers/vault.yml"
-	cat group_vars/webservers/vault.yml
+rollback-app:
+	ansible-playbook -i inventory.ini rollback.yml --tags="app" --vault-password-file .pass
+
+rollback-dd:
+	ansible-playbook -i inventory.ini rollback.yml --tags="dd" --vault-password-file .pass
+
+rollback: rollback-app rollback-dd
+
+.PHONY: install-app install-roles install-colls dd-monitoring deploy vault-edit setup

@@ -1,7 +1,9 @@
+---
 roles:
-  - src: geerlingguy.pip
-  - src: geerlingguy.docker
-  - src: datadog.datadog
+  - name: geerlingguy.pip
 
 collections:
   - name: community.docker
+  - name: ansible.windows
+  - name: community.general
+  - name: datadog.dd
