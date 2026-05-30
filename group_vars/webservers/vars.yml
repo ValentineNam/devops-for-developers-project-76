@@ -1,3 +1,24 @@
+# Non-secret variables for webservers
 db_host: "CHANGE_ME_TO_YOUR_DB_HOST"
 db_name: "redmine"
 db_user: "redmine"
+
+# Reference to vault secrets
+db_password: "{{ vault_db_password }}"
+datadog_api_key: "{{ vault_datadog_api_key }}"
+datadog_app_key: "{{ vault_datadog_app_key }}"
+
+# DataDog agent configuration (non-secret)
+datadog_agent_major_version: 7
+datadog_agent_enabled: true
+
+# HTTP check configuration for Redmine
+datadog_checks:
+  http_check:
+    init_config:
+    instances:
+      - name: "redmine_http"
+        url: "http://localhost:8080"  # Will be checked on each server locally
+        timeout: 5
+        method: GET
+        status_code_expected: 200

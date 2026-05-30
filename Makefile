@@ -7,7 +7,7 @@ install-deps:
 	ANSIBLE_GALAXY=$$(command -v ansible-galaxy) && $$ANSIBLE_GALAXY install -r requirements.yml
 
 prepare: install-deps
-	ANSIBLE_PLAYBOOK=$$(command -v ansible-playbook) && $$ANSIBLE_PLAYBOOK -i inventory.ini playbook.yml
+	ANSIBLE_PLAYBOOK=$$(command -v ansible-playbook) && $$ANSIBLE_PLAYBOOK -i inventory.ini --ask-vault-pass playbook.yml
 
 deploy: install-deps
 	ANSIBLE_PLAYBOOK=$$(command -v ansible-playbook) && $$ANSIBLE_PLAYBOOK -i inventory.ini --ask-vault-pass deploy.yml
